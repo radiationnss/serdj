@@ -4,7 +4,6 @@ from rest_framework import permissions, status
 
 from .serializers import UserCreateSerializer, UserSerializer
 
-
 class RegisterView(APIView):
     def post(self, request):
         data = request.data

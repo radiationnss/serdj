@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 #for jwt
 from rest_framework_simplejwt.views import (
@@ -29,5 +31,13 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('api/users/', include('users.urls')),
-    path("admin/", admin.site.urls)
+    path("admin/", admin.site.urls),
+    path('api/google-oauth2/login/sdk/', include('sdk.urls')),
+    path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.social.urls')),
+    path('accounts/', include('allauth.urls')),
+    path('accounts/', include('allauth.socialaccount.urls')),
+    path('api/predict/', include('prediction.urls')),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

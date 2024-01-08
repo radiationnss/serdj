@@ -54,4 +54,3 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 
-
