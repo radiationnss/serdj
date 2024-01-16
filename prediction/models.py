@@ -1,3 +1,10 @@
 from django.db import models
+from users.models import UserAccount
 
-# Create your models here.
+class Predicted(models.Model):
+    user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+    predicted_value = models.CharField(max_length=255)  # Adjust the max_length as needed
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.email} - {self.predicted_value} - {self.created_at}"

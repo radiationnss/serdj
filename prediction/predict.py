@@ -74,22 +74,17 @@ def get_predict_feat(path):
     d, s_rate= librosa.load(path, duration=2.5, offset=0.6)
     res=extract_features(d)
     result=np.array(res)
-    print(f'Result:{result}')
     result=np.reshape(result,newshape=(1,2376))
     i_result = scaler2.transform(result)
-    print(f'Index:{i_result}')
     final_result=np.expand_dims(i_result, axis=2)
     
     return final_result
 
-res=get_predict_feat("./media/temp_audio.wav")
-print(res.shape)
 
 emotions1={1:'Neutral', 2:'Calm', 3:'Happy', 4:'Sad', 5:'Angry', 6:'Fear', 7:'Disgust',8:'Surprise'}
 def prediction(path1):
     res=get_predict_feat(path1)
-    print(res)
     predictions=loaded_model.predict(res)
     y_pred = encoder2.inverse_transform(predictions)
     print(y_pred[0][0])
-    return y_pred[0][0]
+    return(y_pred[0][0])
