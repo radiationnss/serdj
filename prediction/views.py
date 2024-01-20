@@ -13,7 +13,7 @@ class AudioPredictionView(APIView):
         try:
             # Assuming the file is sent as part of the POST request
             audio_file = request.FILES['file']  # Change 'file' to the name you are using in the FormData
-
+            print(audio_file)
             # Save the uploaded file to a temporary location
             temp_path = './media/temp_audio.wav'  # Change the path to your desired location
             with open(temp_path, 'wb') as f:
