@@ -37,13 +37,12 @@ class PredictionHistoryView(APIView):
         try:
             # Get the prediction history for the authenticated user
             prediction_history = Predicted.objects.filter(user=request.user)
-            
+
             # Serialize the prediction history
             serializer = PredictedSerializer(prediction_history, many=True)
-            
+            print(serializer)
             return Response(data=serializer.data, status=status.HTTP_200_OK)
 
         except Exception as e:
-            # Log the error for debugging purposes
             print("Error:", str(e))
             return Response(data={"detail": "Internal Server Error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
