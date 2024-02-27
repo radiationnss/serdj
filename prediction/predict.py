@@ -81,7 +81,7 @@ def get_predict_feat(path):
     return final_result
 
 
-emotions1={1:'Neutral', 2:'Calm', 3:'Happy', 4:'Sad', 5:'Angry', 6:'Fear', 7:'Disgust',8:'Surprise'}
+emotions1={1:'Neutral', 2:'Happy', 3:'Sad', 4:'Angry'}
 def prediction(path1):
     res=get_predict_feat(path1)
     predictions=loaded_model.predict(res)
