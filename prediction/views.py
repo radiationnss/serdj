@@ -6,6 +6,10 @@ from django.http import HttpResponseServerError
 from .predict1 import prediction
 from .models import Predicted
 from .serializers import PredictedSerializer
+import soundfile as sf
+import librosa
+
+
 
 class AudioPredictionView(APIView):
     def post(self, request, *args, **kwargs):
@@ -18,6 +22,10 @@ class AudioPredictionView(APIView):
             with open(temp_path, 'wb') as f:
                 for chunk in audio_file.chunks():
                     f.write(chunk)
+
+            converted_path = './media/temp_audio.wav'
+            data, sr = librosa.load(temp_path)
+            sf.write(converted_path, data, sr)
 
             prediction_result = prediction(temp_path)
             user = request.user
