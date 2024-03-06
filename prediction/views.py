@@ -10,9 +10,15 @@ import soundfile as sf
 import librosa
 from .speechtotxt import silence_or_not, text_from_speech
 from .sentiment import top_emotions
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 
-
-
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_user_predictions(request):
+    user = request.user
+    Predicted.objects.filter(user=user).delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 class AudioPredictionSentimentView(APIView):
     def post(self, request, *args, **kwargs):
@@ -37,7 +43,7 @@ class AudioPredictionSentimentView(APIView):
                 sentiment = top_emotions(txt)
                 sentiment_dict = dict(sentiment)
                 user = request.user
-                new_prediction = Predicted(user=user, predicted_value=prediction_result)
+                new_prediction = Predicted(user=user, predicted_value=prediction_result, predicted_txt=txt)
                 new_prediction.save()
             else:
                 prediction_result = "couldn't hear anything"
@@ -91,7 +97,6 @@ class PredictionHistoryView(APIView):
 
             # Serialize the prediction history
             serializer = PredictedSerializer(prediction_history, many=True)
-            print(serializer)
             return Response(data=serializer.data, status=status.HTTP_200_OK)
 
         except Exception as e:
