@@ -42,15 +42,15 @@ class AudioPredictionSentimentView(APIView):
                 print(txt)
                 sentiment = top_emotions(txt)
                 sentiment_dict = dict(sentiment)
+                print(sentiment_dict)
                 user = request.user
                 new_prediction = Predicted(user=user, predicted_value=prediction_result, predicted_txt=txt)
                 new_prediction.save()
             else:
-                prediction_result = "couldn't hear anything"
                 txt = ""
                 sentiment_dict = ""
 
-            return Response(data={"prediction_result": prediction_result, "txt": txt, "sentiment": sentiment_dict}, status=status.HTTP_200_OK)
+            return Response(data={"txt": txt, "sentiment": sentiment_dict}, status=status.HTTP_200_OK)
 
         except Exception as e:
             traceback.print_exc()  # This will print the full stack trace
@@ -76,8 +76,9 @@ class AudioPredictionView(APIView):
 
             if silence_or_not(converted_path):
                 prediction_result = prediction(temp_path)
+                txt = text_from_speech(temp_path)
                 user = request.user
-                new_prediction = Predicted(user=user, predicted_value=prediction_result)
+                new_prediction = Predicted(user=user, predicted_value=prediction_result, predicted_txt=txt)
                 new_prediction.save()
             else:
                 prediction_result = "couldn't hear anything"
